@@ -54,21 +54,49 @@ void *DrinkingThePot() {
     return nullptr;
 }
 
+/// функция для проверки является ли чар цифрой
+bool is_digit(const char* S) {
+    const char* temp = "0123456789-+";
+    unsigned point_count = 0;
+
+    for (int i = 0; i < strlen(S); i++) {
+        if ((i > 0) && (S[i] == '+' || S[i] == '-')) return false;
+        if (S[i] == '.') {
+            point_count++;
+            if (point_count > 1) return false;
+        }
+        if (!strchr(temp, S[i])) return false;
+    }
+    return true;
+}
+
+/// функция для проверки введенных данных на корректность
+int CheckInput() {
+    const int N = 256;
+    char S[N];
+    // проверяем на то что введелнное число - не строка и записываем его в переменнуб n
+    cin.getline(S, N);
+    while (!is_digit(S)) {
+        cerr << "Неправильный ввод, попробуйте еще раз!\n";
+        cin.getline(S, N);
+    }
+    return atof(S);
+}
 
 int main() {
     startTime = time(nullptr);
     cout << "Введите количество пчел: ";
-    cin >> n;
+    n = CheckInput();
     while (n <= 0 || n >= 50){
         cout << "Некорректный ввод! Попробуйте еще раз: ";
-        cin >> n;
+        n = CheckInput();
     }
 
     cout << "Введите количество глотоков в горшке: ";
-    cin >> N;
+    N = CheckInput();
     while (N <= 0 || N >= 500){
         cout << "Некорректный ввод! Попробуйте еще раз.\n";
-        cin >> N;
+        N = CheckInput();
     }
 
     pthread_mutex_init(&beeT, nullptr);
